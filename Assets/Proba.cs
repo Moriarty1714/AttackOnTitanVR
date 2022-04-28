@@ -23,9 +23,14 @@ public class Proba : MonoBehaviour
         myLine.SetPosition(0, transform.position);
         myLine.SetPosition(1, transform.position + transform.forward * 100f);
 
-        RaycastHit hit;
         
-        if(Physics.Raycast(transform.position, transform.forward, out hit, 100f))
+    }
+
+    void Shoot()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 100f))
         {
             Debug.Log("Estoy dentro");
             hitGameObject.transform.position = hit.point;
