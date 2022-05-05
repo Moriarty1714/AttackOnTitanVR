@@ -6,13 +6,16 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 public class Proba : MonoBehaviour
 {
-    [SerializeField] GameObject hitGameObject;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] bool leftHand;
-    LineRenderer myLine;
+    [SerializeField] private GameObject hitGameObject;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private bool leftHand;
+    [SerializeField] private GameObject waist;
+
+    private LineRenderer myLine;
+    private LineRenderer hook;
 
     Vector3 hitPoint;
-    bool grabbed = false;
+    public bool grabbed = false;
 
     public InputActionReference click = null;
 
@@ -24,8 +27,13 @@ public class Proba : MonoBehaviour
         myLine.endWidth = 0.02f;
         myLine.positionCount = 2;
 
-        click.action.started += Shoot;
-        click.action.canceled += Shoot3;
+        hook = waist.GetComponent<LineRenderer>();
+        hook.startWidth = 0.02f;
+        hook.endWidth = 0.02f;
+        hook.positionCount = 2;
+
+        click.action.started += Click;
+        click.action.canceled += Release;
     }
 
     // Update is called once per frame
@@ -33,47 +41,29 @@ public class Proba : MonoBehaviour
     {
         //Debug.DrawLine(transform.position, transform.position + transform.forward * 100f, Color.cyan);
         myLine.SetPosition(0, transform.position);
+        hook.SetPosition(0, waist.transform.position);
+
         if (!grabbed)
+        {
             myLine.SetPosition(1, transform.position + transform.forward * 200f);
+            hook.SetPosition(1, waist.transform.position);
+        }
         else
+        {
             myLine.SetPosition(1, hitPoint);
-
-
-        //print(Input.GetAxis("LeftGrab"));
-        //print(Input.GetAxis("RightGrab"));
-        //print(Input.GetKey(KeyCode.JoystickButton14));
-        //print(Input.GetKey(KeyCode.JoystickButton15));
-
-        //if (leftHand)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.JoystickButton15))
-        //        Shoot();
-        //    else if (Input.GetKey(KeyCode.JoystickButton15))
-        //        Shoot2();
-        //    else if (Input.GetKeyUp(KeyCode.JoystickButton15))
-        //        Shoot3();
-        //}
-        //else
-        //{
-        //    if (Input.GetKeyDown(KeyCode.JoystickButton14))
-        //        Shoot();
-        //    else if (Input.GetKey(KeyCode.JoystickButton14))
-        //        Shoot2();
-        //    else if (Input.GetKeyUp(KeyCode.JoystickButton14))
-        //        Shoot3();
-        //}
-
+            hook.SetPosition(1, hitPoint);
+        }
     }
 
     private void FixedUpdate()
     {
         if (grabbed)
-            rb.AddForce((hitPoint - transform.position).normalized * 100f, ForceMode.Force);
-        if (rb.velocity.magnitude >= 50)
+            rb.AddForce((hitPoint - transform.position).normalized * 70f, ForceMode.Force);
+        if (rb.velocity.magnitude >= 20)
             rb.velocity *= 0.95f;
     }
 
-    public void Shoot(InputAction.CallbackContext obj)
+    public void Click(InputAction.CallbackContext obj)
     {
         print("Shoot");
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 200f))
@@ -83,12 +73,20 @@ public class Proba : MonoBehaviour
                 Debug.Log("Estoy hitting");
                 hitPoint = hit.point;
                 grabbed = true;
+
+                StartCoroutine(LaunchHook());
             }
         }
     }
 
-    public void Shoot3(InputAction.CallbackContext obj)
+    public void Release(InputAction.CallbackContext obj)
     {
         grabbed = false;
+    }
+
+    private IEnumerator LaunchHook()
+    {
+        hook.SetPosition(1, hitPoint);
+        yield break;
     }
 }
