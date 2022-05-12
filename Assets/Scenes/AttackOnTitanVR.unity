@@ -2608,6 +2608,14 @@ PrefabInstance:
       propertyPath: m_Parameters.colorGradient.key0.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 341080492, guid: 7e78e52d2d5a50f46b217cc7a58e7b92, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1319746308, guid: 7e78e52d2d5a50f46b217cc7a58e7b92, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 966230087559213497, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
         type: 3}
       propertyPath: rb
