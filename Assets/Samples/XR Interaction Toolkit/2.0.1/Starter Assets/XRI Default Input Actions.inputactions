@@ -469,7 +469,7 @@
                 {
                     "name": "",
                     "id": "26408763-1530-4d14-a10c-153f86b9b989",
-                    "path": "<XRController>{LeftHand}/trackpadPressed",
+                    "path": "<XRInputV1::HTC::HTCViveControllerOpenXR>{LeftHand}/trackpadclicked",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -816,6 +816,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Trackpad",
+                    "type": "Button",
+                    "id": "b79b8959-9893-4ad6-9059-3f57a27e8611",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -994,6 +1003,17 @@
                     "action": "Translate Anchor",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "5a3e4bd6-02ed-4985-b80d-cc812da86078",
+                    "path": "<XRInputV1::HTC::HTCViveControllerOpenXR>{RightHand}/trackpadclicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Trackpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

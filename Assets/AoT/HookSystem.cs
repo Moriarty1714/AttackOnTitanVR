@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 public class HookSystem : MonoBehaviour
 {
     enum State { NONE, SHOOT, PULL }
 
     [Header("References")]
-    public GameObject target;
     public Rigidbody rb;
 
     public GameObject leftController;
@@ -22,12 +22,14 @@ public class HookSystem : MonoBehaviour
     public GameObject rightHook;
     private LineRenderer leftHookLine;
     private LineRenderer rightHookLine;
+    public GameObject leftHookEnd;
+    public GameObject rightHookEnd;
 
     [Header("Variables")]
     public bool leftGrabbed = false;
     public bool rightGrabbed = false;
 
-    public float force = 70f;
+    public float force = 25f;
     public float maxSpeed = 20f;
 
     private Vector3 leftHitPoint, rightHitPoint;
@@ -56,14 +58,17 @@ public class HookSystem : MonoBehaviour
         leftHookLine.endWidth = rightHookLine.endWidth = 0.03f;
         leftHookLine.positionCount = rightHookLine.positionCount = 2;
 
-        // Actions
-        clickLeft.action.started += ClickLeft;
-        clickLeft.action.canceled += ReleaseLeft;
-        clickRight.action.started += ClickRight;
-        clickRight.action.canceled += ReleaseRight;
+        leftHookEnd.transform.position = leftHook.transform.position;
+        rightHookEnd.transform.position = rightHook.transform.position;
 
-        clickLeft2.action.started += CutLeft;
-        clickRight2.action.started += CutRight;
+        // Actions
+        clickLeft.action.started += ShootLeft;
+        clickLeft.action.canceled += CutLeft;
+        clickRight.action.started += ShootRight;
+        clickRight.action.canceled += CutRight;
+
+        clickLeft2.action.started += PullLeft;
+        clickRight2.action.started += PullRight;
     }
 
     // Update is called once per frame
@@ -73,32 +78,22 @@ public class HookSystem : MonoBehaviour
         rightControllerLine.SetPosition(0, rightController.transform.position);
         leftControllerLine.SetPosition(1, leftController.transform.position + leftController.transform.forward * 200f);
         rightControllerLine.SetPosition(1, rightController.transform.position + rightController.transform.forward * 200f);
+
         leftHookLine.SetPosition(0, leftHook.transform.position);
         rightHookLine.SetPosition(0, rightHook.transform.position);
-
+        leftHookLine.SetPosition(1, leftHookEnd.transform.position);
+        rightHookLine.SetPosition(1, rightHookEnd.transform.position);
 
         // Left controller
-        if (leftState != State.NONE)
+        if (leftState == State.NONE)
         {
-            leftHookLine.SetPosition(1, leftHitPoint);
-            
-        }
-        else
-        {
-            leftHookLine.SetPosition(1, leftHook.transform.position);
-            
+            leftHookEnd.transform.position = leftHook.transform.position;
         }
 
         // Right controller
-        if (rightState != State.NONE)
+        if (rightState == State.NONE)
         {
-            rightHookLine.SetPosition(1, rightHitPoint);
-            
-        }
-        else
-        {
-            rightHookLine.SetPosition(1, rightHook.transform.position);
-            
+            rightHookEnd.transform.position = rightHook.transform.position;
         }
 
 
@@ -111,77 +106,60 @@ public class HookSystem : MonoBehaviour
     private void FixedUpdate()
     {
         if (leftState == State.PULL)
-            rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Force);
+            rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
         if (rightState == State.PULL)
-            rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Force);
+            rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
 
         if (rb.velocity.magnitude >= maxSpeed)
             rb.velocity *= 0.95f;
     }
 
-    public void ClickLeft(InputAction.CallbackContext obj)
+    private void ShootLeft(InputAction.CallbackContext obj)
     {
-        print("Shoot");
-        if (leftState != State.NONE)
-        {
-            leftState = State.NONE;
-            return;
-        }
-        if (Physics.Raycast(leftController.transform.position, leftController.transform.forward, out RaycastHit hit, 200f))
-        {
-            if (hit.transform.tag == "Surface")
-            {
-                Debug.Log("Estoy hitting");
-                leftHitPoint = hit.point;
-                leftState = State.SHOOT;
-
-                StartCoroutine(LaunchHook());
-            }
-        }
-        
+        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd);
     }
-    public void ClickRight(InputAction.CallbackContext obj)
+    private void ShootRight(InputAction.CallbackContext obj)
     {
-        if (rightState != State.NONE)
-        {
-            rightState = State.NONE;
-            return;
-        }
-        print("Shoot");
-        if (Physics.Raycast(rightController.transform.position, rightController.transform.forward, out RaycastHit hit, 200f))
+        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd);
+    }
+    private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd)
+    {
+        if (Physics.Raycast(controller.transform.position, controller.transform.forward, out RaycastHit hit, 400f))
         {
             if (hit.transform.tag == "Surface")
             {
-                Debug.Log("Estoy hitting");
-                rightHitPoint = hit.point;
-                rightState = State.SHOOT;
+                hitPoint = hit.point;
+                state = State.SHOOT;
 
-                StartCoroutine(LaunchHook());
+                hookEnd.transform.DOMove(hitPoint, 0.3f);
             }
         }
     }
 
-    public void ReleaseLeft(InputAction.CallbackContext obj)
+    private void PullLeft(InputAction.CallbackContext obj)
     {
-        leftState = State.PULL;
+        if (leftState == State.SHOOT)
+            leftState = State.PULL;
     }
-    public void ReleaseRight(InputAction.CallbackContext obj)
+    private void PullRight(InputAction.CallbackContext obj)
     {
-        rightState = State.PULL;
-    }
-
-    public void CutLeft(InputAction.CallbackContext obj)
-    {
-        leftState = State.NONE;
-    }
-    public void CutRight(InputAction.CallbackContext obj)
-    {
-        rightState = State.NONE;
+        if (rightState == State.SHOOT)
+            rightState = State.PULL;
     }
 
-    private IEnumerator LaunchHook()
+    private void CutLeft(InputAction.CallbackContext obj)
     {
-        leftHookLine.SetPosition(1, leftHitPoint);
-        yield break;
+        Cut(leftHook, leftHookEnd, ref leftState);
+    }
+    private void CutRight(InputAction.CallbackContext obj)
+    {
+        Cut(rightHook, rightHookEnd, ref rightState);
+    }
+    private void Cut(GameObject hook, GameObject hookEnd, ref State state)
+    {
+        state = State.NONE;
+        hookEnd.transform.DOMove(hook.transform.position, 0.3f);
+
+        //rb.AddForce((rb.velocity).normalized * force, ForceMode.Impulse);
     }
 }

@@ -2195,6 +2195,7 @@ Transform:
   - {fileID: 502342291}
   - {fileID: 3901857433910195021}
   - {fileID: 3417804515187395155}
+  - {fileID: 5208581758024669452}
   m_Father: {fileID: 1717954561962503726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2623,10 +2624,10 @@ BoxCollider:
   m_GameObject: {fileID: 1708682931253624635}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.7, y: 3, z: 0.7}
+  m_Center: {x: -0.44, y: 0, z: 0.22}
 --- !u!1 &1717954561962503725
 GameObject:
   m_ObjectHideFlags: 0
@@ -2912,20 +2913,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806ffbd127bc2654b994187dc1ba8f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   rb: {fileID: 0}
   leftController: {fileID: 202364687}
   rightController: {fileID: 1670256624}
   waist: {fileID: 3969816052665726000}
   leftHook: {fileID: 2874026287183519018}
   rightHook: {fileID: 1166454839276983134}
+  leftHookEnd: {fileID: 0}
+  rightHookEnd: {fileID: 0}
   leftGrabbed: 0
   rightGrabbed: 0
   force: 70
   maxSpeed: 20
-  clickLeft: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f,
+  clickLeft: {fileID: -8867299532049246268, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  clickRight: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f,
+  clickRight: {fileID: -846738709422487121, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   clickLeft2: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
@@ -3115,4 +3117,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1767192433}
-  height: 0.7
+  waistHeight: 0.55
+  collider: {fileID: 6970241067779621883}
+--- !u!1 &6970241067779621883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5208581758024669452}
+  - component: {fileID: 2604905737931282053}
+  m_Layer: 0
+  m_Name: Collider (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5208581758024669452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6970241067779621883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1680501587}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2604905737931282053
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6970241067779621883}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.7
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
