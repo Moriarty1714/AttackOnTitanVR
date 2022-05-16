@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class Espada : MonoBehaviour
 {
@@ -172,5 +173,10 @@ public class Espada : MonoBehaviour
             rigidbody.AddForce(newNormal, ForceMode.Impulse);
         }
         
+    }
+
+    public void GrabSword()
+    {
+
     }
 }
