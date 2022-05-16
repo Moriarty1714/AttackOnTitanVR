@@ -9,9 +9,10 @@ using UnityEngine.XR;
 public class LanzaRelampago : MonoBehaviour
 {
     const float SHOOT_FORCE_MULTIPLIER = 200f;
-    InputActionReference shootTrigger;
+    InputActionReference shootTrigger = null;
     private bool isShooted = false;
     Rigidbody rb;
+    [SerializeField]
     ParticleSystem explosionParticles;
 
 
@@ -28,7 +29,10 @@ public class LanzaRelampago : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+		if (Input.GetKey(KeyCode.Space))
+		{
+            Shoot();
+		}
         if (shootTrigger != null)
 		{
             shootTrigger.action.started += CheckShootProjectile;
@@ -37,16 +41,19 @@ public class LanzaRelampago : MonoBehaviour
 
     public void CheckShootProjectile(InputAction.CallbackContext action)
     {
-        if(action.ReadValue<Vector2>() == Vector2.down)
+        Vector2 aux = action.ReadValue<Vector2>();
+        Debug.Log(aux.y);
+        if (aux.y < -0.5f)
 		{
+            Debug.Log("Have Shooted");
             Shoot();
+            DeselectDevice();
         }
     }
 
     public void GetDevice(InputActionReference _shootTrigger)
     {
         shootTrigger = _shootTrigger;
-        DeselectDevice();
     }
 
     public void DeselectDevice()
@@ -63,7 +70,10 @@ public class LanzaRelampago : MonoBehaviour
 
 	private void OnCollisionEnter(Collision collision)
 	{
-        explosionParticles.Play();
-        Destroy(this.gameObject);
+		if (isShooted)
+		{
+            Instantiate(explosionParticles).transform.position = this.transform.position;
+            Destroy(this.gameObject);
+		}
 	}
 }
