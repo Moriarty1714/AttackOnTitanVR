@@ -5,10 +5,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class LanzaRelampago : MonoBehaviour
 {
-    const float SHOOT_FORCE_MULTIPLIER = 200f;
+    const float SHOOT_FORCE_MULTIPLIER = 1000f;
     InputActionReference shootTrigger = null;
     private bool isShooted = false;
     Rigidbody rb;
@@ -35,7 +36,7 @@ public class LanzaRelampago : MonoBehaviour
 		}
         if (shootTrigger != null)
 		{
-            shootTrigger.action.started += CheckShootProjectile;
+            shootTrigger.action.performed += CheckShootProjectile;
 		}
     }
 
@@ -63,6 +64,7 @@ public class LanzaRelampago : MonoBehaviour
     
     public void Shoot()
 	{
+        Destroy(this.GetComponent<XRGrabInteractable>());
         isShooted = true;
         rb.AddRelativeForce(Vector3.forward * SHOOT_FORCE_MULTIPLIER);
         rb.useGravity = false;
