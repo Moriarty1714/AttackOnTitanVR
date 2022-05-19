@@ -303,6 +303,17 @@
                 },
                 {
                     "name": "",
+                    "id": "f5764394-acb5-4d55-a8bd-f75e631fd5d8",
+                    "path": "<OpenVROculusTouchController>/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "49a23327-a116-48c0-8af9-0d2c50c15a88",
                     "path": "<XRController>{LeftHand}/grip",
                     "interactions": "",
