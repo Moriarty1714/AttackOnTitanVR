@@ -35,6 +35,8 @@ public class HookSystem : MonoBehaviour
     private Vector3 leftHitPoint, rightHitPoint;
     private State leftState;
     private State rightState;
+    private float timerLeftHook = 0f;
+    private float timerRightHook = 0f;
 
     public InputActionReference clickLeft = null;
     public InputActionReference clickRight = null;
@@ -67,8 +69,8 @@ public class HookSystem : MonoBehaviour
         clickRight.action.started += ShootRight;
         clickRight.action.canceled += CutRight;
 
-        clickLeft2.action.started += PullLeft;
-        clickRight2.action.started += PullRight;
+        clickLeft2.action.performed += PullLeft;
+        clickRight2.action.performed += PullRight;
     }
 
     // Update is called once per frame
@@ -96,10 +98,20 @@ public class HookSystem : MonoBehaviour
             rightHookEnd.transform.position = rightHook.transform.position;
         }
 
-
-        if (Physics.Raycast(waist.transform.position, rb.velocity, out RaycastHit hit, 10f))
+        Debug.DrawLine(waist.transform.position, waist.transform.position+ rb.velocity.normalized * 5f,Color.black);
+        if (Physics.Raycast(waist.transform.position, rb.velocity.normalized, out RaycastHit hit, 15f))
         {
-            rb.velocity *= 0.99f;
+            if (hit.transform.tag == "Surface")
+                rb.velocity *= 0.965f;
+        }
+
+        if (leftState != State.NONE && rightState != State.NONE) 
+        {
+            rb.drag = 1f;
+        }
+        else 
+        {
+            rb.drag = 0.1f;
         }
     }
 
@@ -110,7 +122,7 @@ public class HookSystem : MonoBehaviour
         if (rightState == State.PULL)
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
 
-        if (rb.velocity.magnitude >= maxSpeed)
+        if (rb.velocity.magnitude >= maxSpeed && (leftState != State.NONE || rightState != State.NONE))
             rb.velocity *= 0.95f;
     }
 
@@ -132,34 +144,83 @@ public class HookSystem : MonoBehaviour
                 state = State.SHOOT;
 
                 hookEnd.transform.DOMove(hitPoint, 0.3f);
+
+                rb.mass = 0.25f;
             }
         }
     }
 
     private void PullLeft(InputAction.CallbackContext obj)
     {
-        if (leftState == State.SHOOT)
-            leftState = State.PULL;
+        if(leftState != State.NONE && obj.ReadValue<float>() <= 0.1f)
+        {
+            leftState = State.SHOOT;
+        }
+        else
+        {
+            if (leftState == State.SHOOT)
+            {
+                leftState = State.PULL;
+                timerLeftHook = Time.time;
+            }
+        }
     }
     private void PullRight(InputAction.CallbackContext obj)
     {
-        if (rightState == State.SHOOT)
-            rightState = State.PULL;
+        if (rightState != State.NONE && obj.ReadValue<float>() <= 0.1f)
+        {
+            rightState = State.SHOOT;
+        }
+        else
+        {
+            if (rightState == State.SHOOT)
+            {
+                rightState = State.PULL;
+                timerRightHook = Time.time;
+            }
+        }
     }
 
     private void CutLeft(InputAction.CallbackContext obj)
     {
-        Cut(leftHook, leftHookEnd, ref leftState);
+        Cut(leftHook, leftHookEnd, ref leftState, timerLeftHook);
     }
     private void CutRight(InputAction.CallbackContext obj)
     {
-        Cut(rightHook, rightHookEnd, ref rightState);
+        Cut(rightHook, rightHookEnd, ref rightState, timerRightHook);
     }
-    private void Cut(GameObject hook, GameObject hookEnd, ref State state)
+    private void Cut(GameObject hook, GameObject hookEnd, ref State state, float timerHook)
     {
+        if (state == State.NONE) return;
+        State lastState = state;
         state = State.NONE;
         hookEnd.transform.DOMove(hook.transform.position, 0.3f);
 
-        //rb.AddForce((rb.velocity).normalized * force, ForceMode.Impulse);
+        if (leftState == State.NONE && rightState == State.NONE )
+        {
+            if (rb.mass != 10f)
+            {
+                StartCoroutine(SetMassInAir());
+            }
+            
+            if (lastState == State.PULL && (Time.time - timerHook) > 0.7f)
+            {
+                //Vector3 vel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                //vel.Normalize();
+                //vel += Vector3.up*(hookEnd.transform.position - hook.transform.position).normalized.y;
+                //vel.Normalize();
+
+                Vector3 vel = hookEnd.transform.position - hook.transform.position;
+                vel.Normalize();
+                rb.AddForce(vel * force / 4f, ForceMode.VelocityChange);
+            }
+        }
+    }
+
+    private IEnumerator SetMassInAir()
+    {
+
+        yield return new WaitForSeconds(2f);
+        rb.mass = 10f;
     }
 }
