@@ -120,17 +120,17 @@ public class Espada : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Sliceable")
-        {
+        //if (other.tag == "Sliceable")
+        //{
             _triggerEnterTipPosition = _tip.transform.position;
             _triggerEnterBasePosition = _base.transform.position;
-        }
+        //}
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Sliceable")
-        {
+        //if(other.tag == "Sliceable")
+        //{
             _triggerExitTipPosition = _tip.transform.position;
 
             //Create a triangle between the tip and base so that we can get the normal
@@ -171,7 +171,7 @@ public class Espada : MonoBehaviour
             Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
             Vector3 newNormal = transformedNormal + (Vector3.up + side1.normalized).normalized * _forceAppliedToCut;
             rigidbody.AddForce(newNormal, ForceMode.Impulse);
-        }
+        //}
         
     }
 
