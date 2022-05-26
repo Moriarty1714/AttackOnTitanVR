@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 using DG.Tweening;
@@ -18,6 +19,8 @@ public class HookSystem : MonoBehaviour
     private LineRenderer rightControllerLine;
 
     public GameObject waist;
+    public GameObject body;
+    public GameObject head;
     public GameObject leftHook;
     public GameObject rightHook;
     private LineRenderer leftHookLine;
@@ -28,6 +31,8 @@ public class HookSystem : MonoBehaviour
     [Header("Variables")]
     public bool leftGrabbed = false;
     public bool rightGrabbed = false;
+    public float leftHookDistance;
+    public float rightHookDistance;
 
     public float force = 25f;
     public float maxSpeed = 20f;
@@ -37,6 +42,8 @@ public class HookSystem : MonoBehaviour
     private State rightState;
     private float timerLeftHook = 0f;
     private float timerRightHook = 0f;
+
+    private Vector3 previousPos;
 
     public InputActionReference clickLeft = null;
     public InputActionReference clickRight = null;
@@ -98,8 +105,8 @@ public class HookSystem : MonoBehaviour
             rightHookEnd.transform.position = rightHook.transform.position;
         }
 
-        Debug.DrawLine(waist.transform.position, waist.transform.position+ rb.velocity.normalized * 5f,Color.black);
-        if (Physics.Raycast(waist.transform.position, rb.velocity.normalized, out RaycastHit hit, 15f))
+        Debug.DrawLine(waist.transform.position, waist.transform.position+ rb.velocity.normalized * 10f,Color.black);
+        if (Physics.Raycast(waist.transform.position, rb.velocity.normalized, out RaycastHit hit, 5f))
         {
             if (hit.transform.tag == "Surface")
                 rb.velocity *= 0.965f;
@@ -118,23 +125,77 @@ public class HookSystem : MonoBehaviour
     private void FixedUpdate()
     {
         if (leftState == State.PULL)
+        {
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
+            leftHookDistance = Vector3.Distance(leftHitPoint, body.transform.position);
+        }
         if (rightState == State.PULL)
+        {
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
+            rightHookDistance = Vector3.Distance(rightHitPoint, body.transform.position);
+        }
+
+        if (leftState == State.SHOOT)
+        {
+            // Força cap al ganxo
+            //rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
+
+            // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
+            if (Vector3.Distance(leftHitPoint, body.transform.position) > leftHookDistance)
+            {
+                Vector3 newPos = leftHitPoint + (body.transform.position - leftHitPoint).normalized * leftHookDistance;
+                Vector3 newVelocity = (newPos - previousPos).normalized * rb.velocity.magnitude;
+
+                //if (rb.velocity.magnitude > 0.1f)
+                //{
+                //    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
+                //    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
+                //    print(angle * Mathf.Rad2Deg);
+                //}
+
+                body.transform.position = newPos;
+                rb.velocity = newVelocity;
+            }
+
+        }
+        if (rightState == State.SHOOT)
+        {
+            // Força cap al ganxo
+            //rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
+
+            // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
+            if (Vector3.Distance(rightHitPoint, body.transform.position) > rightHookDistance)
+            {
+                Vector3 newPos = rightHitPoint + (body.transform.position - rightHitPoint).normalized * rightHookDistance;
+                Vector3 newVelocity = (newPos - previousPos).normalized * rb.velocity.magnitude;
+
+                //if (rb.velocity.magnitude > 0.1f)
+                //{
+                //    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
+                //    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
+                //    print(angle * Mathf.Rad2Deg);
+                //}
+
+                body.transform.position = newPos;
+                rb.velocity = newVelocity;
+            }
+        }
 
         if (rb.velocity.magnitude >= maxSpeed && (leftState != State.NONE || rightState != State.NONE))
             rb.velocity *= 0.95f;
+
+        previousPos = body.transform.position;
     }
 
     private void ShootLeft(InputAction.CallbackContext obj)
     {
-        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd);
+        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd, ref leftHookDistance);
     }
     private void ShootRight(InputAction.CallbackContext obj)
     {
-        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd);
+        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd, ref rightHookDistance);
     }
-    private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd)
+    private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd, ref float hookDistance)
     {
         if (Physics.Raycast(controller.transform.position, controller.transform.forward, out RaycastHit hit, 400f))
         {
@@ -142,6 +203,7 @@ public class HookSystem : MonoBehaviour
             {
                 hitPoint = hit.point;
                 state = State.SHOOT;
+                hookDistance = Vector3.Distance(hitPoint, body.transform.position);
 
                 hookEnd.transform.DOMove(hitPoint, 0.3f);
 
@@ -152,7 +214,7 @@ public class HookSystem : MonoBehaviour
 
     private void PullLeft(InputAction.CallbackContext obj)
     {
-        if(leftState != State.NONE && obj.ReadValue<float>() <= 0.1f)
+        if(leftState != State.NONE && obj.ReadValue<float>() <= 0.2f)
         {
             leftState = State.SHOOT;
         }
@@ -167,7 +229,7 @@ public class HookSystem : MonoBehaviour
     }
     private void PullRight(InputAction.CallbackContext obj)
     {
-        if (rightState != State.NONE && obj.ReadValue<float>() <= 0.1f)
+        if (rightState != State.NONE && obj.ReadValue<float>() <= 0.2f)
         {
             rightState = State.SHOOT;
         }
@@ -192,6 +254,7 @@ public class HookSystem : MonoBehaviour
     private void Cut(GameObject hook, GameObject hookEnd, ref State state, float timerHook)
     {
         if (state == State.NONE) return;
+
         State lastState = state;
         state = State.NONE;
         hookEnd.transform.DOMove(hook.transform.position, 0.3f);
@@ -212,14 +275,13 @@ public class HookSystem : MonoBehaviour
 
                 Vector3 vel = hookEnd.transform.position - hook.transform.position;
                 vel.Normalize();
-                rb.AddForce(vel * force / 4f, ForceMode.VelocityChange);
+                //rb.AddForce(vel * force / 6f, ForceMode.VelocityChange);
             }
         }
     }
 
     private IEnumerator SetMassInAir()
     {
-
         yield return new WaitForSeconds(2f);
         rb.mass = 10f;
     }

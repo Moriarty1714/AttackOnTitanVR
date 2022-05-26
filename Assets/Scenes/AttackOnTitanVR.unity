@@ -2612,8 +2612,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 705080845, guid: 7e78e52d2d5a50f46b217cc7a58e7b92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1319746308, guid: 7e78e52d2d5a50f46b217cc7a58e7b92, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1680501587, guid: 7e78e52d2d5a50f46b217cc7a58e7b92, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 966230087559213497, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
@@ -2726,6 +2734,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Parameters.colorGradient.key0.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232745470614056085, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
+        type: 3}
+      propertyPath: m_TurnAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232745470614056085, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
+        type: 3}
+      propertyPath: m_EnableTurnLeftRight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7035065414357545534, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
         type: 3}
