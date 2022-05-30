@@ -7212,7 +7212,7 @@ GameObject:
   - component: {fileID: 1275995507}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Sliceable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8263,6 +8263,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3162028570345983732, guid: 76c2cb944024065489d9685fc69922e2,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3162028570345983732, guid: 76c2cb944024065489d9685fc69922e2,
         type: 3}
       propertyPath: m_IsKinematic

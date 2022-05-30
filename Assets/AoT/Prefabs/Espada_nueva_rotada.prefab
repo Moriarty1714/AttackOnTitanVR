@@ -319,6 +319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a31f1a6b2bb3431ba4edb776fa66aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swordFragment: {fileID: 8431071492197949664, guid: e9b47cdc514a241489abbb39332a118f,
+    type: 3}
+  swordBrokenParticle: {fileID: 7588551258869133523, guid: f92361bbc9ac74b46a4a5cb48c7d5f17,
+    type: 3}
   _blade: {fileID: 7613167599537406426}
   _tip: {fileID: 2956239609107879506}
   _base: {fileID: 5382908510363242105}

@@ -6,6 +6,12 @@ using UnityEngine.XR;
 
 public class Espada : MonoBehaviour
 {
+    private int breakPercent = 100;
+
+    [SerializeField]
+    GameObject swordFragment;
+    [SerializeField]
+    ParticleSystem swordBrokenParticle;
     //The number of vertices to create per frame
     private const int NUM_VERTICES = 12;
 
@@ -120,17 +126,17 @@ public class Espada : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.tag == "Sliceable")
-        //{
+        if (other.tag == "Sliceable")
+        {
             _triggerEnterTipPosition = _tip.transform.position;
             _triggerEnterBasePosition = _base.transform.position;
-        //}
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //if(other.tag == "Sliceable")
-        //{
+        if(other.tag == "Sliceable")
+        {
             _triggerExitTipPosition = _tip.transform.position;
 
             //Create a triangle between the tip and base so that we can get the normal
@@ -171,12 +177,26 @@ public class Espada : MonoBehaviour
             Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
             Vector3 newNormal = transformedNormal + (Vector3.up + side1.normalized).normalized * _forceAppliedToCut;
             rigidbody.AddForce(newNormal, ForceMode.Impulse);
-        //}
+
+            // Check if sword breaks
+            if(Random.Range(0,100) > breakPercent)
+			{
+                SwordsBreak();
+
+			}
+            breakPercent -= 20;
+        }
         
     }
 
-    public void GrabSword()
-    {
+    public void SwordsBreak()
+	{
+        this.transform.GetChild(0).localScale = new Vector3(0.5f, 1, 1);
+        GameObject fragment = Instantiate(swordFragment);
+        fragment.transform.position = _blade.transform.GetChild(0).position;
+        fragment.GetComponent<Rigidbody>().AddForce(200f * new Vector3(Random.Range(0.0f, 0.5f), 1f, Random.Range(0.0f, 0.5f)));
+        Instantiate(swordBrokenParticle, _blade.transform.GetChild(0));
+        Destroy(this.GetComponent<Espada>());
+	}
 
-    }
 }
