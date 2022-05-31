@@ -321,7 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordFragment: {fileID: 8431071492197949664, guid: e9b47cdc514a241489abbb39332a118f,
     type: 3}
-  swordBrokenParticle: {fileID: 7588551258869133523, guid: f92361bbc9ac74b46a4a5cb48c7d5f17,
+  swordBrokenParticle: {fileID: 511640739841439528, guid: b5eda416607f16c41b11305e0a174252,
     type: 3}
   _blade: {fileID: 7613167599537406426}
   _tip: {fileID: 2956239609107879506}

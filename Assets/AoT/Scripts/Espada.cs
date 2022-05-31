@@ -191,11 +191,11 @@ public class Espada : MonoBehaviour
 
     public void SwordsBreak()
 	{
-        this.transform.GetChild(0).localScale = new Vector3(0.5f, 1, 1);
+        this.transform.GetChild(0).localScale = new Vector3(1f, 0.5f, 1f);
         GameObject fragment = Instantiate(swordFragment);
         fragment.transform.position = _blade.transform.GetChild(0).position;
         fragment.GetComponent<Rigidbody>().AddForce(200f * new Vector3(Random.Range(0.0f, 0.5f), 1f, Random.Range(0.0f, 0.5f)));
-        Instantiate(swordBrokenParticle, _blade.transform.GetChild(0));
+        Instantiate(swordBrokenParticle, _blade.transform.GetChild(0).position, _blade.transform.rotation);
         Destroy(this.GetComponent<Espada>());
 	}
 
