@@ -259,7 +259,7 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_SelectActionTrigger: 1
+  m_SelectActionTrigger: 2
   m_HideControllerOnSelect: 0
   m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 0
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_SelectActionTrigger: 1
+  m_SelectActionTrigger: 2
   m_HideControllerOnSelect: 0
   m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 0
@@ -1775,10 +1775,10 @@ MonoBehaviour:
   m_System: {fileID: 6232745470614056086}
   m_TurnAmount: 45
   m_DebounceTime: 0.5
-  m_EnableTurnLeftRight: 1
+  m_EnableTurnLeftRight: 0
   m_EnableTurnAround: 0
   m_LeftHandSnapTurnAction:
-    m_UseReference: 1
+    m_UseReference: 0
     m_Action:
       m_Name: Left Hand Snap Turn
       m_Type: 0
@@ -1791,7 +1791,7 @@ MonoBehaviour:
     m_Reference: {fileID: 1010738217276881514, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_RightHandSnapTurnAction:
-    m_UseReference: 1
+    m_UseReference: 0
     m_Action:
       m_Name: Right Hand Snap Turn
       m_Type: 0
@@ -2003,6 +2003,8 @@ MonoBehaviour:
   rightHookDistance: 0
   force: 70
   maxSpeed: 20
+  leftState: 0
+  rightState: 0
   clickLeft: {fileID: -8867299532049246268, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   clickRight: {fileID: -846738709422487121, guid: c348712bda248c246b8c49b3db54643f,
@@ -2011,6 +2013,8 @@ MonoBehaviour:
     type: 3}
   clickRight2: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
+  xrL: {fileID: 202364692}
+  xrR: {fileID: 1670256628}
 --- !u!1 &2584729470638160649
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 public class HookSystem : MonoBehaviour
 {
-    enum State { NONE, SHOOT, PULL }
+    public enum State { NONE, SHOOT, PULL }
 
     [Header("References")]
     public Rigidbody rb;
@@ -38,8 +38,8 @@ public class HookSystem : MonoBehaviour
     public float maxSpeed = 20f;
 
     private Vector3 leftHitPoint, rightHitPoint;
-    private State leftState;
-    private State rightState;
+    public State leftState;
+    public State rightState;
     private float timerLeftHook = 0f;
     private float timerRightHook = 0f;
 
@@ -49,6 +49,9 @@ public class HookSystem : MonoBehaviour
     public InputActionReference clickRight = null;
     public InputActionReference clickLeft2 = null;
     public InputActionReference clickRight2 = null;
+
+    [SerializeField] private ActionBasedController xrL;
+    [SerializeField] private ActionBasedController xrR;
 
     // Start is called before the first frame update
     void Start()
@@ -77,7 +80,13 @@ public class HookSystem : MonoBehaviour
         clickRight.action.canceled += CutRight;
 
         clickLeft2.action.performed += PullLeft;
+        clickLeft2.action.canceled += PullEndLeft;
         clickRight2.action.performed += PullRight;
+        clickRight2.action.canceled += PullEndRight;
+
+        //Haptics
+        //InputDevices.GetDevices(inputDevices);
+
     }
 
     // Update is called once per frame
@@ -128,17 +137,19 @@ public class HookSystem : MonoBehaviour
         {
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
             leftHookDistance = Vector3.Distance(leftHitPoint, body.transform.position);
+            xrL.SendHapticImpulse(0.1f, 0.2f);
         }
         if (rightState == State.PULL)
         {
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
             rightHookDistance = Vector3.Distance(rightHitPoint, body.transform.position);
+            xrR.SendHapticImpulse(0.1f, 0.2f);
         }
 
         if (leftState == State.SHOOT)
         {
             // Força cap al ganxo
-            //rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
+            rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
 
             // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
             if (Vector3.Distance(leftHitPoint, body.transform.position) > leftHookDistance)
@@ -146,12 +157,12 @@ public class HookSystem : MonoBehaviour
                 Vector3 newPos = leftHitPoint + (body.transform.position - leftHitPoint).normalized * leftHookDistance;
                 Vector3 newVelocity = (newPos - previousPos).normalized * rb.velocity.magnitude;
 
-                //if (rb.velocity.magnitude > 0.1f)
-                //{
-                //    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
-                //    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
-                //    print(angle * Mathf.Rad2Deg);
-                //}
+                /*if (rb.velocity.magnitude > 0.1f)
+                {
+                    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
+                    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
+                    print(angle * Mathf.Rad2Deg);
+                }*/
 
                 body.transform.position = newPos;
                 rb.velocity = newVelocity;
@@ -161,7 +172,7 @@ public class HookSystem : MonoBehaviour
         if (rightState == State.SHOOT)
         {
             // Força cap al ganxo
-            //rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
+            rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
 
             // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
             if (Vector3.Distance(rightHitPoint, body.transform.position) > rightHookDistance)
@@ -169,16 +180,17 @@ public class HookSystem : MonoBehaviour
                 Vector3 newPos = rightHitPoint + (body.transform.position - rightHitPoint).normalized * rightHookDistance;
                 Vector3 newVelocity = (newPos - previousPos).normalized * rb.velocity.magnitude;
 
-                //if (rb.velocity.magnitude > 0.1f)
-                //{
-                //    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
-                //    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
-                //    print(angle * Mathf.Rad2Deg);
-                //}
+                /*if (rb.velocity.magnitude > 0.1f)
+                {
+                    float angle = Mathf.Acos(Vector3.Dot(newVelocity.normalized, rb.velocity.normalized));
+                    head.GetComponentInParent<XROrigin>().RotateAroundCameraUsingOriginUp(angle * Mathf.Rad2Deg);
+                    print(angle * Mathf.Rad2Deg);
+                }*/
 
                 body.transform.position = newPos;
                 rb.velocity = newVelocity;
             }
+            //print(rightHookDistance);
         }
 
         if (rb.velocity.magnitude >= maxSpeed && (leftState != State.NONE || rightState != State.NONE))
@@ -189,13 +201,13 @@ public class HookSystem : MonoBehaviour
 
     private void ShootLeft(InputAction.CallbackContext obj)
     {
-        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd, ref leftHookDistance);
+        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd, ref leftHookDistance, ref xrL);
     }
     private void ShootRight(InputAction.CallbackContext obj)
     {
-        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd, ref rightHookDistance);
+        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd, ref rightHookDistance, ref xrR);
     }
-    private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd, ref float hookDistance)
+    private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd, ref float hookDistance, ref ActionBasedController vibController)
     {
         if (Physics.Raycast(controller.transform.position, controller.transform.forward, out RaycastHit hit, 400f))
         {
@@ -208,38 +220,40 @@ public class HookSystem : MonoBehaviour
                 hookEnd.transform.DOMove(hitPoint, 0.3f);
 
                 rb.mass = 0.25f;
+
+                vibController.SendHapticImpulse(1.0f, 0.1f);
             }
         }
     }
 
     private void PullLeft(InputAction.CallbackContext obj)
     {
-        if(leftState != State.NONE && obj.ReadValue<float>() <= 0.2f)
+        if (leftState == State.SHOOT)
+        {
+            leftState = State.PULL;
+            timerLeftHook = Time.time;
+        }
+    }
+    private void PullEndLeft(InputAction.CallbackContext obj)
+    {
+        if (leftState == State.PULL)
         {
             leftState = State.SHOOT;
-        }
-        else
-        {
-            if (leftState == State.SHOOT)
-            {
-                leftState = State.PULL;
-                timerLeftHook = Time.time;
-            }
         }
     }
     private void PullRight(InputAction.CallbackContext obj)
     {
-        if (rightState != State.NONE && obj.ReadValue<float>() <= 0.2f)
+        if (rightState == State.SHOOT)
+        {
+            rightState = State.PULL;
+            timerRightHook = Time.time;
+        }
+    }
+    private void PullEndRight(InputAction.CallbackContext obj)
+    {
+        if (rightState == State.PULL)
         {
             rightState = State.SHOOT;
-        }
-        else
-        {
-            if (rightState == State.SHOOT)
-            {
-                rightState = State.PULL;
-                timerRightHook = Time.time;
-            }
         }
     }
 
@@ -285,4 +299,22 @@ public class HookSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         rb.mass = 10f;
     }
+
+    //private void pulse() {
+    //    foreach (var device in inputDevices)
+    //    {
+    //        HapticCapabilities capabilities;
+    //        if (device.TryGetHapticCapabilities(out capabilities))
+    //        {
+    //            if (capabilities.supportsImpulse)
+    //            {
+    //                uint channel = 0;
+    //                float amplitude = 0.5f;
+    //                float duration = 1.0f;
+    //                device.SendHapticImpulse(channel, amplitude, duration);
+    //            }
+    //        }
+    //    }
+    //    xr.SendHapticImpulse(0.7f, 2f);
+    //}
 }
