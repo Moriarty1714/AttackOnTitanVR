@@ -75,6 +75,10 @@ public class LanzaRelampago : MonoBehaviour
 		if (isShooted)
 		{
             Instantiate(explosionParticles).transform.position = this.transform.position;
+            if(collision.gameObject.TryGetComponent<Diana>(out var diana))
+			{
+                Destroy(diana.transform.parent.gameObject);
+			}
             Destroy(this.gameObject);
 		}
 	}

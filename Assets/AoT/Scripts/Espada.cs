@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Espada : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class Espada : MonoBehaviour
     GameObject swordFragment;
     [SerializeField]
     ParticleSystem swordBrokenParticle;
+    AudioSource swordBrokenSound;
+
+    [SerializeField] private ActionBasedController xrL;
+    [SerializeField] private ActionBasedController xrR;
+
     //The number of vertices to create per frame
     private const int NUM_VERTICES = 12;
 
@@ -60,6 +66,7 @@ public class Espada : MonoBehaviour
         _meshParent.transform.position = Vector3.zero;
         _mesh = new Mesh();
         _meshParent.GetComponent<MeshFilter>().mesh = _mesh;
+        swordBrokenSound = this.GetComponent<AudioSource>();
 
         Material trailMaterial = Instantiate(_meshParent.GetComponent<MeshRenderer>().sharedMaterial);
         trailMaterial.SetColor("Color_8F0C0815", _colour);
@@ -126,11 +133,19 @@ public class Espada : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.tag == "Sliceable")
         {
             _triggerEnterTipPosition = _tip.transform.position;
             _triggerEnterBasePosition = _base.transform.position;
         }
+		if (other.TryGetComponent<Diana>(out var diana))
+		{
+			if (diana.isMetal)
+			{
+                SwordsBreak();
+			}
+		}
     }
 
     private void OnTriggerExit(Collider other)
@@ -170,7 +185,7 @@ public class Espada : MonoBehaviour
             GameObject[] slices = Slicer.Slice(plane, other.gameObject);
             foreach (GameObject slice in slices)
             {
-                //Destroy(slice.GetComponent<Sliceable>());
+                Destroy(slice.GetComponent<Sliceable>());
             }
             Destroy(other.gameObject);
 
@@ -184,18 +199,29 @@ public class Espada : MonoBehaviour
                 SwordsBreak();
 
 			}
-            breakPercent -= 20;
+            breakPercent -= 10;
         }
         
     }
 
     public void SwordsBreak()
 	{
-        this.transform.GetChild(0).localScale = new Vector3(1f, 0.5f, 1f);
+        if(Vector3.Distance(this.transform.position, xrL.transform.position) < Vector3.Distance(this.transform.position, xrR.transform.position))
+		{
+            // Està en Left
+            xrL.SendHapticImpulse(1f, 0.3f);
+		}
+		else
+		{
+            xrR.SendHapticImpulse(1f, 0.3f);
+		}
+        this.transform.GetChild(0).localScale = new Vector3(1f, 0.3f, 1f);
+        Destroy(this.GetComponent<XRGrabInteractable>());
         GameObject fragment = Instantiate(swordFragment);
         fragment.transform.position = _blade.transform.GetChild(0).position;
         fragment.GetComponent<Rigidbody>().AddForce(200f * new Vector3(Random.Range(0.0f, 0.5f), 1f, Random.Range(0.0f, 0.5f)));
         Instantiate(swordBrokenParticle, _blade.transform.GetChild(0).position, _blade.transform.rotation);
+        swordBrokenSound.Play();
         Destroy(this.GetComponent<Espada>());
 	}
 

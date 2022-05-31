@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 2089181688582107369}
   - component: {fileID: 554810953481364286}
   - component: {fileID: 4300870193295984852}
+  - component: {fileID: 7867624558646906363}
   m_Layer: 0
   m_Name: Diana
   m_TagString: Sliceable
@@ -358,6 +359,21 @@ MonoBehaviour:
   _useGravity: 1
   _shareVertices: 0
   _smoothVertices: 0
+--- !u!114 &7867624558646906363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555611591126764940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520b7c57f26302e4dbe77c9616eec054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMetal: 0
+  metalMat: {fileID: 2100000, guid: ee61da0e147bff1488793107fd2dc947, type: 2}
+  woodMat: {fileID: 2100000, guid: ce4b77858ec6c0f469b07b034c21a85f, type: 2}
 --- !u!1 &7386270770259240790
 GameObject:
   m_ObjectHideFlags: 0
