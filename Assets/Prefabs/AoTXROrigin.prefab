@@ -2001,8 +2001,8 @@ MonoBehaviour:
   rightGrabbed: 0
   leftHookDistance: 0
   rightHookDistance: 0
-  force: 70
-  maxSpeed: 20
+  force: 200
+  maxSpeed: 50
   leftState: 0
   rightState: 0
   clickLeft: {fileID: -8867299532049246268, guid: c348712bda248c246b8c49b3db54643f,
