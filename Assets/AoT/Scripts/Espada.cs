@@ -62,6 +62,8 @@ public class Espada : MonoBehaviour
 
     void Start()
     {
+        xrL = GameObject.Find("LeftBaseController").GetComponent<ActionBasedController>();
+        xrR = GameObject.Find("RightBaseController").GetComponent<ActionBasedController>();
         //Init mesh and triangles
         _meshParent.transform.position = Vector3.zero;
         _mesh = new Mesh();
@@ -83,8 +85,7 @@ public class Espada : MonoBehaviour
         _previousTipPosition = _tip.transform.position;
         _previousBasePosition = _base.transform.position;
 
-        xrL = GameObject.Find("LeftBaseController").GetComponent<ActionBasedController>();
-        xrR = GameObject.Find("RightBaseController").GetComponent<ActionBasedController>();
+        
     }
     
     void LateUpdate()
@@ -137,22 +138,23 @@ public class Espada : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||
-        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f)
-		{
-            if (other.tag == "Sliceable")
-            {
-                _triggerEnterTipPosition = _tip.transform.position;
-                _triggerEnterBasePosition = _base.transform.position;
-            }
-            else if (other.TryGetComponent<Diana>(out var diana))
-            {
-                if (diana.isMetal)
+        if(xrL != null && xrR != null)
+            if(Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||
+            Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f)
+		    {
+                if (other.tag == "Sliceable")
                 {
-                    SwordsBreak();
+                    _triggerEnterTipPosition = _tip.transform.position;
+                    _triggerEnterBasePosition = _base.transform.position;
+                }
+                else if (other.TryGetComponent<Diana>(out var diana))
+                {
+                    if (diana.isMetal)
+                    {
+                        SwordsBreak();
+                    }
                 }
             }
-        }
     }
 
     private void OnTriggerExit(Collider other)
