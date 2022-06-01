@@ -9,12 +9,12 @@ public class RandomTrees : MonoBehaviour
 
     public int treeNum;
 
-    public GameObject[] trees = new GameObject[3];
+    public GameObject tree;
     void Start()
     {
         for (int i = 0; i < treeNum; i++)
         {
-            Instantiate(trees[Random.Range(0,3)], new Vector3(Random.Range(start.position.x,end.position.x), 0, Random.Range(start.position.z, end.position.z)), Quaternion.identity);
+            GameObject tmp = Instantiate(tree, new Vector3(Random.Range(start.position.x,end.position.x), 0, Random.Range(start.position.z, end.position.z)), Quaternion.identity);
         }
     }
 
