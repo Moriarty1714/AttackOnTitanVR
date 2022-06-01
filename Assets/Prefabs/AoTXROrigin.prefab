@@ -2867,7 +2867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806ffbd127bc2654b994187dc1ba8f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  rb: {fileID: 6345272520413591760}
   leftController: {fileID: 202364687}
   rightController: {fileID: 1670256624}
   waist: {fileID: 3969816052665726000}
@@ -2895,9 +2895,9 @@ MonoBehaviour:
     type: 3}
   xrL: {fileID: 202364692}
   xrR: {fileID: 1670256628}
-  hookLeftSource: {fileID: 0}
-  hookRightSource: {fileID: 0}
-  hookClip: {fileID: 0}
+  hookLeftSource: {fileID: 8850000790411898420}
+  hookRightSource: {fileID: 5829784733128032267}
+  hookClip: {fileID: 8300000, guid: a75c924c3a3cd514cadb1d3aa159918b, type: 3}
 --- !u!54 &6345272520413591760
 Rigidbody:
   m_ObjectHideFlags: 0

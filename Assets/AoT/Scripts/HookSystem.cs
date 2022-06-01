@@ -219,7 +219,7 @@ public class HookSystem : MonoBehaviour
     {
         if (Physics.Raycast(controller.transform.position, controller.transform.forward, out RaycastHit hit, 400f))
         {
-            if (hit.transform.tag == "Surface")
+            if (hit.transform.tag == "Surface" || hit.transform.tag == "Sliceable")
             {
                 hitPoint = hit.point;
                 state = State.SHOOT;

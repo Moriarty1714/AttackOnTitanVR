@@ -9,7 +9,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class LanzaRelampago : MonoBehaviour
 {
-    const float SHOOT_FORCE_MULTIPLIER = 1000f;
+    const float SHOOT_FORCE_MULTIPLIER = 4000f;
     InputActionReference shootTrigger = null;
     private bool isShooted = false;
     Rigidbody rb;
@@ -22,13 +22,14 @@ public class LanzaRelampago : MonoBehaviour
     [SerializeField] private AudioSource fireRightSource;
     [SerializeField] private AudioClip fireAudioClip;
     [SerializeField] private AudioClip explAudioClip;
-
+    private LineRenderer line;
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
         xrL = GameObject.Find("LeftBaseController").GetComponent<ActionBasedController>();
         xrR = GameObject.Find("RightBaseController").GetComponent<ActionBasedController>();
+        line = this.GetComponent<LineRenderer>();
     }
 
     private void OnEnable()
@@ -38,15 +39,11 @@ public class LanzaRelampago : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKey(KeyCode.Space))
-		{
-			
-            Shoot();
-            
-		}
+
         if (shootTrigger != null)
 		{
             shootTrigger.action.performed += CheckShootProjectile;
+            shootTrigger.action.canceled += Shoot;
 		}
     }
 
@@ -66,8 +63,8 @@ public class LanzaRelampago : MonoBehaviour
 				fireRightSource.PlayOneShot(fireAudioClip);
 				explSource.PlayOneShot(explAudioClip);
 			}
-            Shoot();
-            DeselectDevice();
+            ShootFlagActive();
+            
         }
     }
 
@@ -81,25 +78,38 @@ public class LanzaRelampago : MonoBehaviour
         shootTrigger = null;
 	}
     
-    public void Shoot()
+    public void Shoot(InputAction.CallbackContext action)
 	{
-		
-        Destroy(this.GetComponent<XRGrabInteractable>());
-        isShooted = true;
-        rb.AddRelativeForce(Vector3.forward * SHOOT_FORCE_MULTIPLIER);
-        rb.useGravity = false;
+		if (isShooted)
+		{
+            Destroy(this.GetComponent<XRGrabInteractable>());
+            rb.AddRelativeForce(Vector3.forward * SHOOT_FORCE_MULTIPLIER);
+            rb.useGravity = false;
+            DeselectDevice();
+            line.SetPosition(1, this.transform.position);
+        }
+        
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (isShooted)
-		{
-            Instantiate(explosionParticles).transform.position = this.transform.position;
-            if(collision.gameObject.TryGetComponent<Diana>(out var diana))
-			{
-                Destroy(diana.transform.parent.gameObject);
-			}
-            Destroy(this.gameObject);
-		}
+        if(collision.gameObject.tag == "Sliceable" || collision.gameObject.tag == "Surface")
+		    if (isShooted)
+		    {
+                Instantiate(explosionParticles).transform.position = this.transform.position;
+                if(collision.gameObject.TryGetComponent<Diana>(out var diana))
+			    {
+                    Destroy(diana.transform.parent.gameObject);
+			    }
+                Destroy(this.gameObject);
+		    }
 	}
+
+    void ShootFlagActive()
+	{
+        isShooted = true;
+        line.SetPosition(0, this.transform.position);
+        line.SetPosition(1, this.transform.position + this.transform.forward * 200);
+
+    }
 }

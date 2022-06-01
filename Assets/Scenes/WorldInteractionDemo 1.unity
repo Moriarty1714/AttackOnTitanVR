@@ -620,6 +620,11 @@ PrefabInstance:
       propertyPath: m_StartingSelectedInteractable
       value: 
       objectReference: {fileID: 5332517}
+    - target: {fileID: 5536919725766046117, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
+        type: 3}
+      propertyPath: m_StartingSelectedInteractable
+      value: 
+      objectReference: {fileID: 412596372}
     - target: {fileID: 6345272520413591760, guid: 7e78e52d2d5a50f46b217cc7a58e7b92,
         type: 3}
       propertyPath: m_Drag
@@ -1695,6 +1700,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76c2cb944024065489d9685fc69922e2, type: 3}
+--- !u!114 &412596372 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3308678697905617251, guid: 95d83db262078884a8dd3ca3ff3b825e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1063411887}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &430709441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1046394220503202592, guid: 5cfd2ccd492a28b4092e212defe1d914,
