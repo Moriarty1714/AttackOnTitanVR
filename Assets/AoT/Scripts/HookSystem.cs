@@ -53,9 +53,9 @@ public class HookSystem : MonoBehaviour
     [SerializeField] private ActionBasedController xrL;
     [SerializeField] private ActionBasedController xrR;
 
-    [SerializeField] private AudioSource hookLeftSource;
-    [SerializeField] private AudioSource hookRightSource;
-    [SerializeField] public AudioClip hookClip;
+   // [SerializeField] private AudioSource hookLeftSource;
+   // [SerializeField] private AudioSource hookRightSource;
+   // [SerializeField] public AudioClip hookClip;
     
     // Start is called before the first frame update
     void Start()
@@ -142,19 +142,19 @@ public class HookSystem : MonoBehaviour
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
             leftHookDistance = Vector3.Distance(leftHitPoint, body.transform.position);
             xrL.SendHapticImpulse(0.2f, 0.2f);
-            hookLeftSource.Play();
+            //hookLeftSource.Play();
         }
         if (rightState == State.PULL)
         {
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
             rightHookDistance = Vector3.Distance(rightHitPoint, body.transform.position);
             xrR.SendHapticImpulse(0.2f, 0.2f);
-            hookRightSource.Play();
+            //hookRightSource.Play();
         }
 
         if (leftState == State.SHOOT)
         {
-            hookLeftSource.Pause();
+            //hookLeftSource.Pause();
             // For�a cap al ganxo
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
 
@@ -178,7 +178,7 @@ public class HookSystem : MonoBehaviour
         }
         if (rightState == State.SHOOT)
         {
-            hookRightSource.Pause();
+            //hookRightSource.Pause();
             // For�a cap al ganxo
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
 
@@ -307,22 +307,4 @@ public class HookSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         rb.mass = 10f;
     }
-
-    //private void pulse() {
-    //    foreach (var device in inputDevices)
-    //    {
-    //        HapticCapabilities capabilities;
-    //        if (device.TryGetHapticCapabilities(out capabilities))
-    //        {
-    //            if (capabilities.supportsImpulse)
-    //            {
-    //                uint channel = 0;
-    //                float amplitude = 0.5f;
-    //                float duration = 1.0f;
-    //                device.SendHapticImpulse(channel, amplitude, duration);
-    //            }
-    //        }
-    //    }
-    //    xr.SendHapticImpulse(0.7f, 2f);
-    //}
 }

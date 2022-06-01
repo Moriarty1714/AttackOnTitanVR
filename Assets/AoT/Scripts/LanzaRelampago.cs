@@ -11,7 +11,9 @@ public class LanzaRelampago : MonoBehaviour
 {
     const float SHOOT_FORCE_MULTIPLIER = 4000f;
     InputActionReference shootTrigger = null;
-    private bool isShooted = false;
+    [SerializeField] private InputActionReference shootClick;
+    private bool isHoldingDown = false;
+    private bool isClicking = false;
     Rigidbody rb;
     [SerializeField]
     ParticleSystem explosionParticles;
@@ -43,8 +45,18 @@ public class LanzaRelampago : MonoBehaviour
         if (shootTrigger != null)
 		{
             shootTrigger.action.performed += CheckShootProjectile;
-            shootTrigger.action.canceled += Shoot;
+            shootClick.action.started += Aim;
+            shootClick.action.canceled += Shoot;
 		}
+
+        if (isHoldingDown && isClicking)
+        {
+            ShootFlagActive();
+        }
+        else
+        {
+            line.startColor = new Color(line.startColor.r, line.startColor.g, line.startColor.b, 0f);
+        }
     }
 
     public void CheckShootProjectile(InputAction.CallbackContext action)
@@ -54,7 +66,7 @@ public class LanzaRelampago : MonoBehaviour
         Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f ||  
         Vector3.Distance(this.transform.position, xrR.transform.position) < 0.37f))
 		{
-			if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f){
+			/*if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f){
 				fireSource.PlayOneShot(fireAudioClip);
 				explSource.PlayOneShot(explAudioClip);
 				
@@ -62,9 +74,12 @@ public class LanzaRelampago : MonoBehaviour
 			else{
 				fireRightSource.PlayOneShot(fireAudioClip);
 				explSource.PlayOneShot(explAudioClip);
-			}
-            ShootFlagActive();
-            
+			}*/
+            isHoldingDown = true;
+        }
+        else
+        {
+            isHoldingDown = false;
         }
     }
 
@@ -80,7 +95,7 @@ public class LanzaRelampago : MonoBehaviour
     
     public void Shoot(InputAction.CallbackContext action)
 	{
-		if (isShooted)
+		if (isHoldingDown)
 		{
             Destroy(this.GetComponent<XRGrabInteractable>());
             rb.AddRelativeForce(Vector3.forward * SHOOT_FORCE_MULTIPLIER);
@@ -88,13 +103,19 @@ public class LanzaRelampago : MonoBehaviour
             DeselectDevice();
             line.SetPosition(1, this.transform.position);
         }
-        
-	}
 
-	private void OnCollisionEnter(Collision collision)
+        isClicking = false;
+    }
+
+    public void Aim(InputAction.CallbackContext action)
+    {
+        isClicking = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
 	{
         if(collision.gameObject.tag == "Sliceable" || collision.gameObject.tag == "Surface")
-		    if (isShooted)
+		    if (isHoldingDown)
 		    {
                 Instantiate(explosionParticles).transform.position = this.transform.position;
                 if(collision.gameObject.TryGetComponent<Diana>(out var diana))
@@ -107,9 +128,8 @@ public class LanzaRelampago : MonoBehaviour
 
     void ShootFlagActive()
 	{
-        isShooted = true;
+        line.startColor = new Color(line.startColor.r, line.startColor.g, line.startColor.b, 1f);
         line.SetPosition(0, this.transform.position);
         line.SetPosition(1, this.transform.position + this.transform.forward * 200);
-
     }
 }

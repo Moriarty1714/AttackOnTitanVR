@@ -271,6 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3376a1e758977594fb5d4dd6e3a9b214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootClick: {fileID: -8867299532049246268, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
   explosionParticles: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
     type: 3}
   fireSource: {fileID: 5603269039684548235}
