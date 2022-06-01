@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 5912220528434194637}
   - component: {fileID: 4292386496208914022}
   - component: {fileID: 5060381072594880601}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Espada_nueva_rotada
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +355,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9174688095607262457}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.3, z: 0.3}

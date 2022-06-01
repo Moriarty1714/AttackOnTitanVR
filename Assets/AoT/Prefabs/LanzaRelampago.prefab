@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1046394220503202598}
   - component: {fileID: 1046394220503202592}
   - component: {fileID: 5645415980117503749}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LanzaRelampago
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,8 +272,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionParticles: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
     type: 3}
-  xrL: {fileID: 0}
-  xrR: {fileID: 0}
   fireSource: {fileID: 5645415980117503749}
   explSource: {fileID: 5645415980117503749}
   fireRightSource: {fileID: 5645415980117503749}
@@ -482,10 +480,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7146521406498821007, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6279895175461484612, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4841327252261037126, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1252286498514081582, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ba0866264261bb41bcabd4fab4956c2,
         type: 3}
       propertyPath: m_Name
       value: ModeloLanza
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6767559492127519299, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 5ba0866264261bb41bcabd4fab4956c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ba0866264261bb41bcabd4fab4956c2, type: 3}

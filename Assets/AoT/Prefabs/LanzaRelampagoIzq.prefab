@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3308678697905617251}
   - component: {fileID: 3308678697905617253}
   - component: {fileID: 5603269039684548235}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LanzaRelampagoIzq
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,8 +272,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionParticles: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
     type: 3}
-  xrL: {fileID: 0}
-  xrR: {fileID: 0}
   fireSource: {fileID: 5603269039684548235}
   explSource: {fileID: 5603269039684548235}
   fireRightSource: {fileID: 5603269039684548235}
