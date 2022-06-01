@@ -55,8 +55,8 @@ public class LanzaRelampago : MonoBehaviour
         Vector2 aux = action.ReadValue<Vector2>();
         Debug.Log(aux.y);
         if (aux.y < -0.5 && (
-        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||  
-        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
+        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f ||  
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.37f))
 		{
 			if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f){
 				fireSource.PlayOneShot(fireAudioClip);

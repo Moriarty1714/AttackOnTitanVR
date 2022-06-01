@@ -82,6 +82,9 @@ public class Espada : MonoBehaviour
         //Set starting position for tip and base
         _previousTipPosition = _tip.transform.position;
         _previousBasePosition = _base.transform.position;
+
+        xrL = GameObject.Find("LeftBaseController").GetComponent<ActionBasedController>();
+        xrR = GameObject.Find("RightBaseController").GetComponent<ActionBasedController>();
     }
     
     void LateUpdate()
@@ -129,29 +132,34 @@ public class Espada : MonoBehaviour
         _previousTipPosition = _tip.transform.position;
         _previousBasePosition = _base.transform.position;
         _frameCount += NUM_VERTICES;
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.tag == "Sliceable")
-        {
-            _triggerEnterTipPosition = _tip.transform.position;
-            _triggerEnterBasePosition = _base.transform.position;
-        }
-		else if (other.TryGetComponent<Diana>(out var diana))
+        if(Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f)
 		{
-            print("SLICE");
-			if (diana.isMetal)
-			{
-                SwordsBreak();
-			}
-		}
+            if (other.tag == "Sliceable")
+            {
+                _triggerEnterTipPosition = _tip.transform.position;
+                _triggerEnterBasePosition = _base.transform.position;
+            }
+            else if (other.TryGetComponent<Diana>(out var diana))
+            {
+                if (diana.isMetal)
+                {
+                    SwordsBreak();
+                }
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Sliceable")
+        if(other.tag == "Sliceable" && (
+        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
         {
             _triggerExitTipPosition = _tip.transform.position;
 
