@@ -19,7 +19,7 @@ public class LanzaRelampago : MonoBehaviour
     [SerializeField] private ActionBasedController xrR;
     [SerializeField] private AudioSource fireSource;
     [SerializeField] private AudioSource explSource;
-    //[SerializeField] private AudioSource fireRightSource;
+    [SerializeField] private AudioSource fireRightSource;
     [SerializeField] private AudioClip fireAudioClip;
     [SerializeField] private AudioClip explAudioClip;
 
@@ -58,8 +58,15 @@ public class LanzaRelampago : MonoBehaviour
         Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||  
         Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
 		{
-			fireSource.PlayOneShot(fireAudioClip);
-			explSource.PlayOneShot(explAudioClip);
+			if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f){
+				fireSource.PlayOneShot(fireAudioClip);
+				explSource.PlayOneShot(explAudioClip);
+				
+			}
+			else{
+				fireRightSource.PlayOneShot(fireAudioClip);
+				explSource.PlayOneShot(explAudioClip);
+			}
             Debug.Log("Have Shooted");
             Shoot();
             DeselectDevice();
