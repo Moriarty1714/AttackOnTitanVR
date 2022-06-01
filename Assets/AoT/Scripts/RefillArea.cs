@@ -11,9 +11,11 @@ public class RefillArea : MonoBehaviour
     GameObject lanzaIzquierda;
     [SerializeField]
     GameObject lanzaDerecha;
+    private AudioSource audio;
     // Start is called before the first frame update
     void Start()
     {
+        audio = this.GetComponent<AudioSource>();
         foreach (XRSocketInteractor socket in GameObject.FindObjectsOfType<XRSocketInteractor>())
         {
             
@@ -69,6 +71,7 @@ public class RefillArea : MonoBehaviour
 					}
 				}
 			}
+            audio.Play();
 		}
 	}
 }
