@@ -139,8 +139,9 @@ public class Espada : MonoBehaviour
             _triggerEnterTipPosition = _tip.transform.position;
             _triggerEnterBasePosition = _base.transform.position;
         }
-		if (other.TryGetComponent<Diana>(out var diana))
+		else if (other.TryGetComponent<Diana>(out var diana))
 		{
+            print("SLICE");
 			if (diana.isMetal)
 			{
                 SwordsBreak();

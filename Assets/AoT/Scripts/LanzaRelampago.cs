@@ -43,7 +43,7 @@ public class LanzaRelampago : MonoBehaviour
     public void CheckShootProjectile(InputAction.CallbackContext action)
     {
         Vector2 aux = action.ReadValue<Vector2>();
-        Debug.Log(aux.y);
+        //Debug.Log(aux.y);
         if (aux.y < -0.5f)
 		{
             Debug.Log("Have Shooted");

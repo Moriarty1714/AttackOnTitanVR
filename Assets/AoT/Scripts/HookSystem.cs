@@ -137,21 +137,21 @@ public class HookSystem : MonoBehaviour
         {
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
             leftHookDistance = Vector3.Distance(leftHitPoint, body.transform.position);
-            xrL.SendHapticImpulse(0.1f, 0.2f);
+            xrL.SendHapticImpulse(0.2f, 0.2f);
         }
         if (rightState == State.PULL)
         {
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
             rightHookDistance = Vector3.Distance(rightHitPoint, body.transform.position);
-            xrR.SendHapticImpulse(0.1f, 0.2f);
+            xrR.SendHapticImpulse(0.2f, 0.2f);
         }
 
         if (leftState == State.SHOOT)
         {
-            // Força cap al ganxo
+            // Forï¿½a cap al ganxo
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
 
-            // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
+            // Re-calibra la posiciï¿½ per a que el ganxo no s'allargui ni s'acurti
             if (Vector3.Distance(leftHitPoint, body.transform.position) > leftHookDistance)
             {
                 Vector3 newPos = leftHitPoint + (body.transform.position - leftHitPoint).normalized * leftHookDistance;
@@ -171,10 +171,10 @@ public class HookSystem : MonoBehaviour
         }
         if (rightState == State.SHOOT)
         {
-            // Força cap al ganxo
+            // Forï¿½a cap al ganxo
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
 
-            // Re-calibra la posició per a que el ganxo no s'allargui ni s'acurti
+            // Re-calibra la posiciï¿½ per a que el ganxo no s'allargui ni s'acurti
             if (Vector3.Distance(rightHitPoint, body.transform.position) > rightHookDistance)
             {
                 Vector3 newPos = rightHitPoint + (body.transform.position - rightHitPoint).normalized * rightHookDistance;

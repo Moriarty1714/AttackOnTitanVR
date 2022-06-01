@@ -15,6 +15,8 @@ public class Diana : MonoBehaviour
 		if (isMetal)
 		{
             this.GetComponent<MeshRenderer>().material = metalMat;
+            this.tag = "Untagged";
+            Destroy(this.GetComponent<Sliceable>());
 		}
 		else
 		{
