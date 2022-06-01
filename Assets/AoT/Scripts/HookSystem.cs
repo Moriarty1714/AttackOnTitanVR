@@ -42,13 +42,17 @@ public class HookSystem : MonoBehaviour
     public State rightState;
     private float timerLeftHook = 0f;
     private float timerRightHook = 0f;
+    private bool isLeftHoldingUp = false;
+    private bool isRightHoldingUp = false;
 
     private Vector3 previousPos;
 
     public InputActionReference clickLeft = null;
     public InputActionReference clickRight = null;
-    public InputActionReference clickLeft2 = null;
-    public InputActionReference clickRight2 = null;
+    public InputActionReference triggerLeft = null;
+    public InputActionReference triggerRight = null;
+    public InputActionReference touchLeft = null;
+    public InputActionReference touchRight = null;
 
     [SerializeField] private ActionBasedController xrL;
     [SerializeField] private ActionBasedController xrR;
@@ -83,14 +87,13 @@ public class HookSystem : MonoBehaviour
         clickRight.action.started += ShootRight;
         clickRight.action.canceled += CutRight;
 
-        clickLeft2.action.performed += PullLeft;
-        clickLeft2.action.canceled += PullEndLeft;
-        clickRight2.action.performed += PullRight;
-        clickRight2.action.canceled += PullEndRight;
+        triggerLeft.action.performed += PullLeft;
+        triggerLeft.action.canceled += PullEndLeft;
+        triggerRight.action.performed += PullRight;
+        triggerRight.action.canceled += PullEndRight;
 
-        //Haptics
-        //InputDevices.GetDevices(inputDevices);
-
+        touchLeft.action.performed += CheckTouchLeft;
+        touchRight.action.performed += CheckTouchRight;
     }
 
     // Update is called once per frame
@@ -198,7 +201,6 @@ public class HookSystem : MonoBehaviour
                 body.transform.position = newPos;
                 rb.velocity = newVelocity;
             }
-            //print(rightHookDistance);
         }
 
         if (rb.velocity.magnitude >= maxSpeed && (leftState != State.NONE || rightState != State.NONE))
@@ -209,11 +211,13 @@ public class HookSystem : MonoBehaviour
 
     private void ShootLeft(InputAction.CallbackContext obj)
     {
-        Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd, ref leftHookDistance, ref xrL);
+        if (isLeftHoldingUp)
+            Shoot(ref leftState, ref leftController, ref leftHitPoint, ref leftHookLine, ref leftHookEnd, ref leftHookDistance, ref xrL);
     }
     private void ShootRight(InputAction.CallbackContext obj)
     {
-        Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd, ref rightHookDistance, ref xrR);
+        if (isRightHoldingUp)
+            Shoot(ref rightState, ref rightController, ref rightHitPoint, ref rightHookLine, ref rightHookEnd, ref rightHookDistance, ref xrR);
     }
     private void Shoot(ref State state, ref GameObject controller, ref Vector3 hitPoint, ref LineRenderer hookLine, ref GameObject hookEnd, ref float hookDistance, ref ActionBasedController vibController)
     {
@@ -299,6 +303,31 @@ public class HookSystem : MonoBehaviour
                 vel.Normalize();
                 //rb.AddForce(vel * force / 6f, ForceMode.VelocityChange);
             }
+        }
+    }
+
+    private void CheckTouchLeft(InputAction.CallbackContext obj)
+    {
+        Vector2 value = obj.ReadValue<Vector2>();
+        if (value.y >= 0.5f)
+        {
+            isLeftHoldingUp = true;
+        }
+        else
+        {
+            isLeftHoldingUp = false;
+        }
+    }
+    private void CheckTouchRight(InputAction.CallbackContext obj)
+    {
+        Vector2 value = obj.ReadValue<Vector2>();
+        if (value.y >= 0.5f)
+        {
+            isRightHoldingUp = true;
+        }
+        else
+        {
+            isRightHoldingUp = false;
         }
     }
 

@@ -62,9 +62,9 @@ public class LanzaRelampago : MonoBehaviour
     public void CheckShootProjectile(InputAction.CallbackContext action)
     {
         Vector2 aux = action.ReadValue<Vector2>();
-        if (aux.y < -0.5 && (
+        if (aux.y < -0.5/* && (
         Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f ||  
-        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.37f))
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.37f)*/)
 		{
 			/*if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f){
 				fireSource.PlayOneShot(fireAudioClip);

@@ -2881,23 +2881,24 @@ MonoBehaviour:
   rightGrabbed: 0
   leftHookDistance: 0
   rightHookDistance: 0
-  force: 200
-  maxSpeed: 50
+  force: 150
+  maxSpeed: 40
   leftState: 0
   rightState: 0
   clickLeft: {fileID: -8867299532049246268, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   clickRight: {fileID: -846738709422487121, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  clickLeft2: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
+  triggerLeft: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  clickRight2: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
+  triggerRight: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  touchLeft: {fileID: 7779212132400271959, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  touchRight: {fileID: 875253871413052681, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   xrL: {fileID: 202364692}
   xrR: {fileID: 1670256628}
-  hookLeftSource: {fileID: 8850000790411898420}
-  hookRightSource: {fileID: 5829784733128032267}
-  hookClip: {fileID: 8300000, guid: a75c924c3a3cd514cadb1d3aa159918b, type: 3}
 --- !u!54 &6345272520413591760
 Rigidbody:
   m_ObjectHideFlags: 0
