@@ -274,8 +274,9 @@ MonoBehaviour:
     type: 3}
   xrL: {fileID: 0}
   xrR: {fileID: 0}
-  fireSource: {fileID: 0}
+  fireSource: {fileID: 5645415980117503749}
   explSource: {fileID: 5645415980117503749}
+  fireRightSource: {fileID: 5645415980117503749}
   fireAudioClip: {fileID: 8300000, guid: 6b6e0ac6aa7ff8b4aafaab0b307c8c6a, type: 3}
   explAudioClip: {fileID: 8300000, guid: bb1e0bb547eb2e346a2d105282d63e19, type: 3}
 --- !u!82 &5645415980117503749

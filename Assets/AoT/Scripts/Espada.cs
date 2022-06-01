@@ -15,8 +15,8 @@ public class Espada : MonoBehaviour
     ParticleSystem swordBrokenParticle;
     AudioSource swordBrokenSound;
 
-    [SerializeField] private ActionBasedController xrL;
-    [SerializeField] private ActionBasedController xrR;
+    private ActionBasedController xrL;
+    private ActionBasedController xrR;
 
     //The number of vertices to create per frame
     private const int NUM_VERTICES = 12;

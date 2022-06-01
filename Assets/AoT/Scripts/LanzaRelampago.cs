@@ -15,8 +15,8 @@ public class LanzaRelampago : MonoBehaviour
     Rigidbody rb;
     [SerializeField]
     ParticleSystem explosionParticles;
-    [SerializeField] private ActionBasedController xrL;
-    [SerializeField] private ActionBasedController xrR;
+    private ActionBasedController xrL;
+    private ActionBasedController xrR;
     [SerializeField] private AudioSource fireSource;
     [SerializeField] private AudioSource explSource;
     [SerializeField] private AudioSource fireRightSource;
@@ -27,8 +27,8 @@ public class LanzaRelampago : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        xrL = GameObject.Find("leftBaseController").GetComponent<ActionBasedController>();
-        xrR = GameObject.Find("rightBaseController").GetComponent<ActionBasedController>();
+        xrL = GameObject.Find("LeftBaseController").GetComponent<ActionBasedController>();
+        xrR = GameObject.Find("RightBaseController").GetComponent<ActionBasedController>();
     }
 
     private void OnEnable()
@@ -53,12 +53,11 @@ public class LanzaRelampago : MonoBehaviour
     public void CheckShootProjectile(InputAction.CallbackContext action)
     {
         Vector2 aux = action.ReadValue<Vector2>();
-        Debug.Log(aux.y);
         if (aux.y < -0.5 && (
         Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f ||  
         Vector3.Distance(this.transform.position, xrR.transform.position) < 0.37f))
 		{
-			if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f){
+			if ( Vector3.Distance(this.transform.position, xrL.transform.position) < 0.37f){
 				fireSource.PlayOneShot(fireAudioClip);
 				explSource.PlayOneShot(explAudioClip);
 				
@@ -67,7 +66,6 @@ public class LanzaRelampago : MonoBehaviour
 				fireRightSource.PlayOneShot(fireAudioClip);
 				explSource.PlayOneShot(explAudioClip);
 			}
-            Debug.Log("Have Shooted");
             Shoot();
             DeselectDevice();
         }
