@@ -53,6 +53,10 @@ public class HookSystem : MonoBehaviour
     [SerializeField] private ActionBasedController xrL;
     [SerializeField] private ActionBasedController xrR;
 
+    [SerializeField] private AudioSource hookLeftSource;
+    [SerializeField] private AudioSource hookRightSource;
+    [SerializeField] public AudioClip hookClip;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -138,16 +142,19 @@ public class HookSystem : MonoBehaviour
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized * force, ForceMode.Acceleration);
             leftHookDistance = Vector3.Distance(leftHitPoint, body.transform.position);
             xrL.SendHapticImpulse(0.2f, 0.2f);
+            hookLeftSource.Play();
         }
         if (rightState == State.PULL)
         {
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * force, ForceMode.Acceleration);
             rightHookDistance = Vector3.Distance(rightHitPoint, body.transform.position);
             xrR.SendHapticImpulse(0.2f, 0.2f);
+            hookRightSource.Play();
         }
 
         if (leftState == State.SHOOT)
         {
+            hookLeftSource.Pause();
             // For�a cap al ganxo
             rb.AddForce((leftHitPoint - leftController.transform.position).normalized*rb.velocity.magnitude, ForceMode.Acceleration);
 
@@ -171,6 +178,7 @@ public class HookSystem : MonoBehaviour
         }
         if (rightState == State.SHOOT)
         {
+            hookRightSource.Pause();
             // For�a cap al ganxo
             rb.AddForce((rightHitPoint - rightController.transform.position).normalized * rb.velocity.magnitude, ForceMode.Acceleration);
 
