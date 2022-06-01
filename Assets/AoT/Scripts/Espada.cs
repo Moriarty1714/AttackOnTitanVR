@@ -1,4 +1,4 @@
-﻿using Assets.Scripts;
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -134,7 +134,9 @@ public class Espada : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.tag == "Sliceable")
+        if (other.tag == "Sliceable" && (
+        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||  
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
         {
             _triggerEnterTipPosition = _tip.transform.position;
             _triggerEnterBasePosition = _base.transform.position;
@@ -150,7 +152,9 @@ public class Espada : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Sliceable")
+        if(other.tag == "Sliceable" && (
+        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||  
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
         {
             _triggerExitTipPosition = _tip.transform.position;
 

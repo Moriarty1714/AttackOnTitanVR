@@ -15,12 +15,16 @@ public class LanzaRelampago : MonoBehaviour
     Rigidbody rb;
     [SerializeField]
     ParticleSystem explosionParticles;
+    [SerializeField] private ActionBasedController xrL;
+    [SerializeField] private ActionBasedController xrR;
 
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+        xrL = GameObject.Find("leftBaseController");
+        xrR = GameObject.Find("rightBaseController");
     }
 
     private void OnEnable()
@@ -44,7 +48,9 @@ public class LanzaRelampago : MonoBehaviour
     {
         Vector2 aux = action.ReadValue<Vector2>();
         Debug.Log(aux.y);
-        if (aux.y < -0.5f)
+        if (aux.y < -0.5 && (
+        Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||  
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f))
 		{
             Debug.Log("Have Shooted");
             Shoot();
