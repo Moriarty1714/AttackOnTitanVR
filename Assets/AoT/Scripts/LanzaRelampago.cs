@@ -85,7 +85,9 @@ public class LanzaRelampago : MonoBehaviour
 
     public void GetDevice(InputActionReference _shootTrigger)
     {
-        shootTrigger = _shootTrigger;
+        if(Vector3.Distance(this.transform.position, xrL.transform.position) < 0.4f ||
+        Vector3.Distance(this.transform.position, xrR.transform.position) < 0.4f)
+            shootTrigger = _shootTrigger;
     }
 
     public void DeselectDevice()
