@@ -142,8 +142,17 @@ public class Espada : MonoBehaviour
             if(Vector3.Distance(this.transform.position, xrL.transform.position) < 0.1f ||
             Vector3.Distance(this.transform.position, xrR.transform.position) < 0.1f)
 		    {
-                if (other.tag == "Sliceable")
+                if (other.tag == "Sliceable" && other.GetComponent<Sliceable>() != null)
                 {
+                    if (Vector3.Distance(this.transform.position, xrL.transform.position) < Vector3.Distance(this.transform.position, xrR.transform.position))
+                    {
+                        // Està en Left
+                        xrL.SendHapticImpulse(1f, 0.3f);
+                    }
+                    else
+                    {
+                        xrR.SendHapticImpulse(1f, 0.3f);
+                    }
                     _triggerEnterTipPosition = _tip.transform.position;
                     _triggerEnterBasePosition = _base.transform.position;
                 }

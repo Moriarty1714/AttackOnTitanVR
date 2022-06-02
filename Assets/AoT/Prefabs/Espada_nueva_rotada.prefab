@@ -56,7 +56,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2956239609107879506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.977, z: 0}
+  m_LocalPosition: {x: 0, y: 10.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8080942047539601640}
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5382908510363242105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.169, z: -0}
+  m_LocalPosition: {x: 0, y: -7.47, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8080942047539601640}
@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 540849355984678076}
   - component: {fileID: 261577270559909577}
   - component: {fileID: 3070866043819394856}
+  - component: {fileID: 123479101335101442}
   m_Layer: 0
   m_Name: Filo
   m_TagString: Untagged
@@ -266,11 +267,24 @@ MeshCollider:
   m_GameObject: {fileID: 7613167599537406426}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &123479101335101442
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7613167599537406426}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.99999994, y: 10.489584, z: 1.0000001}
+  m_Center: {x: 0.000000041392113, y: 2.09, z: -0.000030609466}
 --- !u!1 &9174688095607262457
 GameObject:
   m_ObjectHideFlags: 0
